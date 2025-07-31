@@ -7,11 +7,13 @@ namespace App\Controllers;
 use App\Entities\Book;
 use App\Repositories\BookRepository;
 use App\Entities\Author;
+use App\Repositories\AuthorRepository;
 
 class BookController
 {
 
     private BookRepository $bookRepository;
+    private AuthorRepository $authorRepository;
 
     public function __construct()
     {
@@ -32,6 +34,17 @@ class BookController
                 echo json_encode($list);
             }
             return;
+        }
+
+        $payload = json_decode(file_get_contents('php://input'), true);
+
+        if($method === 'POST'){
+            $author = $this->authorRepository->findById((int)$payload['author_id']?? 0);
+            if(!$author){
+                http_response_code(400);
+                echo json_encode(['error' => 'Author not found']);
+                return;
+            }
         }
     }
 
