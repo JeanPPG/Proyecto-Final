@@ -65,16 +65,68 @@ class BookRepository implements RepositoryInterface
     }
 
     public function create(object $entity): bool{
-        
+        if (!$entity instanceof Book) {
+            throw new \InvalidArgumentException('Expected instance of Book');
+        }
+        $stmt = $this->db->prepare('CALL sp_create_book(:title, :description, :publication_date, :author_id, :isbn, :genre, :edition);');
+        $ok = $stmt->execute([
+            ':title' => $entity->getTitle(),
+            ':description' => $entity->getDescription(),
+            ':publication_date' => $entity->getPublicationDate(),
+            ':author_id' => $entity->getAuthor()->getId(),
+            ':isbn' => $entity->getIsbn(),
+            ':genre' => $entity->getGenres(),
+            ':edition' => $entity->getEdition()
+        ]);
+        if(!$ok) {
+         $ok -> fetchAll();
+        }
+        $stmt->closeCursor();
+        return $ok;
     }
-    public function findById(int $id): ?object{
-        
-    }
+    
     public function update(object $entity): bool{
-        
-    }
-    public function delete(int $id): bool{};
+        if (!$entity instanceof Book) {
+            throw new \InvalidArgumentException('Expected instance of Book');
+        }
+        $stmt = $this->db->prepare('CALL sp_update_book(:publication_id, :title, :description, :publication_date, :author_id, :isbn, :genre, :edition);');
+        $ok = $stmt->execute([
+            ':publication_id' => $entity->getId(),
+            ':title' => $entity->getTitle(),
+            ':description' => $entity->getDescription(),
+            ':publication_date' => $entity->getPublicationDate(),
+            ':author_id' => $entity->getAuthor()->getId(),
+            ':isbn' => $entity->getIsbn(),
+            ':genre' => $entity->getGenres(),
+            ':edition' => $entity->getEdition()
+        ]);
 
+        if(!$ok) {
+            $ok -> fetchAll();
+        }
+        $stmt->closeCursor();
+        return $ok;
+    }
+    public function delete(int $id): bool{
+        $stmt = $this->db->prepare('CALL sp_delete_book(:publication_id);');
+        $ok = $stmt->execute([':publication_id' => $id]);
+        
+        if(!$ok) {
+            $ok -> fetchAll();
+        }
+        $stmt->closeCursor();
+        return $ok;
+    }
+
+    public function findById(int $id): ?object
+    {
+        $stmt = $this->db->prepare('CALL sp_book_find_by_id(:publication_id);');
+        $stmt->execute([':publication_id' => $id]);
+        $row = $stmt->fetch();
+        $stmt->closeCursor();
+
+        return $row ? $this->hydrate($row) : null;
+    }
     
 }
 
