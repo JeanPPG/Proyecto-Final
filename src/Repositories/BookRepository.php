@@ -32,7 +32,7 @@ class BookRepository implements RepositoryInterface
             $row['email'],
             'temporal', 
             $row['orcid'],
-            $row['affiliation']
+            $row['affilation']
          );
         //REEMPLAZAR HASH SIN REGENERAR
         $ref = new \ReflectionClass($author);
@@ -75,7 +75,7 @@ class BookRepository implements RepositoryInterface
             ':publication_date' => $entity->getPublicationDate(),
             ':author_id' => $entity->getAuthor()->getId(),
             ':isbn' => $entity->getIsbn(),
-            ':genre' => $entity->getGenres(),
+            ':genre' => $entity->getGenre(),
             ':edition' => $entity->getEdition()
         ]);
         if(!$ok) {
@@ -97,7 +97,7 @@ class BookRepository implements RepositoryInterface
             ':publication_date' => $entity->getPublicationDate(),
             ':author_id' => $entity->getAuthor()->getId(),
             ':isbn' => $entity->getIsbn(),
-            ':genre' => $entity->getGenres(),
+            ':genre' => $entity->getGenre(),
             ':edition' => $entity->getEdition()
         ]);
 
@@ -129,6 +129,3 @@ class BookRepository implements RepositoryInterface
     }
     
 }
-
-// TAREA: Crear main y llamar a AuthorRepository y BookRepository y demostrar que funcionan correctamente.
-//Crear articulo

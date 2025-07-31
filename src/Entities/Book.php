@@ -8,7 +8,7 @@ class Book extends Publication
 {
     private string $isbn;
     private string $edition;
-    private array $genres;
+    private string $genre;
 
     public function __construct(
         int $id,
@@ -18,12 +18,12 @@ class Book extends Publication
         Author $author,
         string $isbn,
         string $edition,
-        array $genres
+        string $genre
     ) {
         parent::__construct($id, $title, $description, $publication_date, $author);
         $this->isbn = $isbn;
         $this->edition = $edition;
-        $this->genres = $genres;
+        $this->genre = $genre;
     }
 
     /* Getters */
@@ -40,9 +40,9 @@ class Book extends Publication
     }
 
    
-    public function getGenres(): array
+    public function getGenre(): string
     {
-        return $this->genres;
+        return $this->genre;
     }
 
     /* Setters */
@@ -60,8 +60,8 @@ class Book extends Publication
 
     
 
-    public function setGenres(array $genres): void
+    public function setGenre(string $genre): void
     {
-        $this->genres = $genres;
+        $this->genre = $genre;
     }
 }
