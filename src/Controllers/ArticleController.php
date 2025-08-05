@@ -41,7 +41,7 @@ class ArticleController {
                 return;
             }
             $article = new Article(
-                null,
+                0,
                 $payload['title'],
                 $payload['description'],
                 new \DateTime($payload['publication_date'] ?? 'now'),
