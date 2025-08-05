@@ -1,108 +1,127 @@
 <?php
 
 declare(strict_types=1);
-
 namespace App\Entities;
 
-class Author
-{
+class Author {
     private int $id;
-    private string $first_name;
-    private string $last_name;
+    private string $firstName;
+    private string $lastName;
     private string $username;
     private string $email;
     private string $password;
     private string $orcid;
-    private string $affiliation;
+    private string $afiliation;
 
     public function __construct(
         int $id,
-        string $first_name,
-        string $last_name,
+        string $firstName,
+        string $lastName,
         string $username,
         string $email,
         string $password,
         string $orcid,
-        string $affiliation
+        string $afiliation
     ) {
         $this->id = $id;
-        $this->first_name = $first_name;
-        $this->last_name = $last_name;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
         $this->username = $username;
         $this->email = $email;
-        $this->password = $password;
+        $this->password = password_hash($password, algo: PASSWORD_DEFAULT);
         $this->orcid = $orcid;
-        $this->affiliation = $affiliation;
+        $this->afiliation = $afiliation;
     }
 
-    /*Getters*/
-
-    public function getId(): int
-    {
+    public function getId(): int {
         return $this->id;
     }
-    public function getFirstName(): string
-    {
-        return $this->first_name;
+
+    public function getFirstName(): string {
+        return $this->firstName;
     }
-    public function getLastName(): string
-    {
-        return $this->last_name;
+
+    public function getLastName(): string {
+        return $this->lastName;
     }
-    public function getUsername(): string
-    {
+
+    public function getUsername(): string {
         return $this->username;
     }
-    public function getEmail(): string
-    {
+
+    public function getEmail(): string {
         return $this->email;
     }
-    public function getPassword(): string
-    {
+
+    public function getPassword(): string {
         return $this->password;
     }
-    public function getOrcid(): string
-    {
+
+    public function getOrcid(): string {
         return $this->orcid;
     }
-    public function getAffiliation(): string
-    {
-        return $this->affiliation;
+
+    public function getAfiliation(): string {
+        return $this->afiliation;
     }
 
-    /*Setters*/
-
-    public function setId(int $id): void
-    {
+    public function setId(int $id): void {
         $this->id = $id;
     }
-    public function setFirstName(string $first_name): void
-    {
-        $this->first_name = $first_name;
+
+    public function setFirstName(string $firstName): void {
+        $this->firstName = $firstName;
     }
-    public function setLastName(string $last_name): void
-    {
-        $this->last_name = $last_name;
+
+    public function setLastName(string $lastName): void {
+        $this->lastName = $lastName;
     }
-    public function setUsername(string $username): void
-    {
+
+    public function setUsername(string $username): void {
         $this->username = $username;
     }
-    public function setEmail(string $email): void
-    {
+
+    public function setEmail(string $email): void {
         $this->email = $email;
     }
-    public function setPassword(string $plain): void
-    {
-        //$this->password = $password;
-        $this->password = password_hash($plain, PASSWORD_BCRYPT);
+
+    public function setPassword(string $password): void {
+        $this->password = password_hash($password, PASSWORD_BCRYPT);
     }
-    public function setOrcid(string $orcid): void
-    {
+
+    public function setOrcid(string $orcid): void {
         $this->orcid = $orcid;
     }
-    public function setAffiliation(string $affiliation): void
-    {
-        $this->affiliation = $affiliation;
+
+    public function setAfiliation(string $afiliation): void {
+        $this->afiliation = $afiliation;
     }
+
+    public function toArray(): array {
+        return [
+            'id' => $this->id,
+            'firstName' => $this->firstName,
+            'lastName' => $this->lastName,
+            'username' => $this->username,
+            'email' => $this->email,
+            'orcid' => $this->orcid,
+            'afiliation' => $this->afiliation
+        ];
+    }
+
+    public static function fromArray(array $data): self {
+        return new self(
+            $data['id'],
+            $data['firstName'],
+            $data['lastName'],
+            $data['username'],
+            $data['email'],
+            $data['password'],
+            $data['orcid'],
+            $data['afiliation']
+        );
+    }
+
+
+
 }

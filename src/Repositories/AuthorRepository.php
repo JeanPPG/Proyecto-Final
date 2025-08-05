@@ -17,97 +17,101 @@ class AuthorRepository implements RepositoryInterface
     {
         $this->db = Database::getConnection();
     }
-
-    public function findAll(): array
-    {
-        $stmt = $this->db->query('SELECT * FROM author'); 
-        $authors = [];
-        while ($row = $stmt->fetch()) {
-            $authors[] = $this->hydrate($row);
+    
+    public function findAll(): array {
+        $stmt = $this->db->query("SELECT * FROM author");//salida sql
+        $list = [];
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $list[] = $this->hydrate($row); //row -> fila sql
         }
-        return $authors;
+        return $list;
     }
 
-    public function findById(int $id): ?object
-    {
-        $stmt = $this->db->prepare('SELECT * FROM author WHERE id = :id');
-        $stmt->execute([':id' => $id]);
-        $row = $stmt->fetch();
-        return $row ? $this->hydrate($row) : null;
-    }
-
-    public function create(object $entity): bool
-    {
+    public function create(object $entity): bool {
         if (!$entity instanceof Author) {
-            throw new \InvalidArgumentException('Expected instance of Author');
+            throw new \InvalidArgumentException("Expected instance of Author");
         }
 
-        $sql = 'INSERT INTO author (first_name, last_name, username, email, password, orcid, affiliation) 
-                VALUES (:first_name, :last_name, :username, :email, :password, :orcid, :affiliation)';
+        $sql = "INSERT INTO author 
+                (first_name, last_name, username, email, password, orcid, afiliation) 
+                VALUES (:first_name, :last_name, :username, :email, :password, :orcid, :afiliation)";
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
-            ':first_name' => $entity->getFirstName(),
-            ':last_name' => $entity->getLastName(),
-            ':username' => $entity->getUsername(),
-            ':email' => $entity->getEmail(),
-            ':password' => password_hash($entity->getPassword(), PASSWORD_BCRYPT),
-            ':orcid' => $entity->getOrcid(),
-            ':affiliation' => $entity->getAffiliation()
+            "first_name"    => $entity->getFirstName(),
+            "last_name"     => $entity->getLastName(),
+            "username"      => $entity->getUsername(),
+            "email"         => $entity->getEmail(),
+            "password"      => $entity->getPassword(),
+            "orcid"         => $entity->getOrcid(),
+            "afiliation"    => $entity->getAfiliation()
         ]);
-
     }
 
-    public function update(object $entity): bool
-    {
+    public function update(object $entity): bool {
         if (!$entity instanceof Author) {
-            throw new \InvalidArgumentException('Expected instance of Author');
+            throw new \InvalidArgumentException("Expected instance of Author");
         }
 
-        $sql = 'UPDATE author SET first_name = :first_name, last_name = :last_name, username = :username, 
-                email = :email, password = :password, orcid = :orcid, affiliation = :affiliation 
-                WHERE id = :id';
+        $sql = "UPDATE author SET 
+                first_name = :first_name, 
+                last_name = :last_name, 
+                username = :username, 
+                email = :email, 
+                password = :password, 
+                orcid = :orcid, 
+                afiliation = :afiliation 
+                WHERE id = :id";
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
-            ':id' => $entity->getId(),
-            ':first_name' => $entity->getFirstName(),
-            ':last_name' => $entity->getLastName(),
-            ':username' => $entity->getUsername(),
-            ':email' => $entity->getEmail(),
-            ':password' => password_hash($entity->getPassword(), PASSWORD_BCRYPT),
-            ':orcid' => $entity->getOrcid(),
-            ':affiliation' => $entity->getAffiliation()
+            "id"           => $entity->getId(),
+            "first_name"   => $entity->getFirstName(),
+            "last_name"    => $entity->getLastName(),
+            "username"     => $entity->getUsername(),
+            "email"        => $entity->getEmail(),
+            "password"     => $entity->getPassword(),
+            "orcid"        => $entity->getOrcid(),
+            "afiliation"   => $entity->getAfiliation()
         ]);
     }
 
-    public function delete(int $id): bool
-    {
-        $sql = 'DELETE FROM author WHERE id = :id';
+    public function delete(int $id): bool {
+        $sql = "DELETE FROM author WHERE id = :id";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([':id' => $id]);
+        return $stmt->execute(["id" => $id]);
     }
 
-    //Convierte fila SQL a entidad Author
-    private function hydrate(array $row): Author
-    {
+    //convierte filas sql a Author
+    private function hydrate(array $row): Author {
         $author = new Author(
-            (int)$row['id'],
+            (int)$row ['id'],
             $row['first_name'],
             $row['last_name'],
             $row['username'],
             $row['email'],
-            'temporal', 
+            'temporal',
             $row['orcid'],
-            $row['affiliation'] ?? ''
-         );
-        //REEMPLAZAR HASH SIN REGENERAR
+            $row['afiliation']
+        );
+
+        //Reemplazar hash sin regenerar
         $ref = new \ReflectionClass($author);
-        $property = $ref->getProperty('password');
-        $property->setAccessible(true);
-        $property->setValue($author, $row['password']);
+        $prop=$ref->getProperty('password');
+        $prop->setAccessible(true);
+        $prop->setValue($author, $row['password']);
 
-
-        return $author;       
+        return $author;
     }
+
+    public function findById(int $id): ?object {
+        $sql = "SELECT * FROM author WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(["id" => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $row ? $this->hydrate($row) : null;
+    }
+
+
 }

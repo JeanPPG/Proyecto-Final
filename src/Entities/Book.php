@@ -7,61 +7,51 @@ namespace App\Entities;
 class Book extends Publication
 {
     private string $isbn;
-    private string $edition;
     private string $genre;
+    private int $edition;
 
     public function __construct(
         int $id,
         string $title,
         string $description,
-        \DateTime $publication_date,
+        \DateTime $publicationDate,
         Author $author,
         string $isbn,
-        string $edition,
-        string $genre
+        string $genre,
+        int $edition
     ) {
-        parent::__construct($id, $title, $description, $publication_date, $author);
+        parent::__construct($id, $title, $description, $publicationDate, $author);
         $this->isbn = $isbn;
-        $this->edition = $edition;
         $this->genre = $genre;
+        $this->edition = $edition;
     }
 
-    /* Getters */
-
-    public function getIsbn(): string
-    {
+    public function getIsbn(): string {
         return $this->isbn;
     }
 
-    
-    public function getEdition(): string
-    {
-        return $this->edition;
-    }
-
-   
-    public function getGenre(): string
-    {
+    public function getGenre(): string {
         return $this->genre;
     }
 
-    /* Setters */
+    public function getEdition(): int {
+        return $this->edition;
+    }
 
-    public function setIsbn(string $isbn): void
-    {
+    public function setIsbn(string $isbn): void {
         $this->isbn = $isbn;
     }
 
-    
-    public function setEdition(string $edition): void
-    {
+    public function setGenre(string $genre): void {
+        $this->genre = $genre;
+    }
+
+    public function setEdition(int $edition): void {
         $this->edition = $edition;
     }
 
-    
-
-    public function setGenre(string $genre): void
-    {
-        $this->genre = $genre;
-    }
 }
+
+
+//Revisar Inner JOIN JOIN, y ingresar datos de prueba en la base de datos
+//para ingresar datos en author, book, article, publication

@@ -1,74 +1,69 @@
 <?php
 
 declare(strict_types=1);
-
 namespace App\Entities;
 
-abstract class Publication
-{
+abstract class Publication {
     protected int $id;
     protected string $title;
     protected string $description;
-    protected \DateTime $publication_date;
+    protected \DateTime $publicationDate;
     protected Author $author;
 
     public function __construct(
         int $id,
         string $title,
         string $description,
-        \DateTime $publication_date,
-        Author $author,
+        \DateTime $publicationDate,
+        Author $author
     ) {
         $this->id = $id;
         $this->title = $title;
         $this->description = $description;
-        $this->publication_date = $publication_date;
+        $this->publicationDate = $publicationDate;
         $this->author = $author;
     }
 
-    /*Getters*/
-
-    public function getId(): int
-    {
+    public function getId(): int {
         return $this->id;
     }
-    public function getTitle(): string
-    {
+
+    public function getTitle(): string {
         return $this->title;
     }
-    public function getDescription(): string
-    {
+
+    public function getDescription(): string {
         return $this->description;
     }
-    public function getPublicationDate(): \DateTime
-    {
-        return $this->publication_date;
+
+    public function getPublicationDate(): \DateTime {
+        return $this->publicationDate;
     }
-    public function getAuthor(): Author
-    {
+
+    public function getAuthor(): Author {
         return $this->author;
     }
 
-    /*Setters*/
-
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
-    public function setTitle(string $title): void
-    {
+    public function setTitle(string $title): void {
         $this->title = $title;
     }
-    public function setDescription(string $description): void
-    {
+
+    public function setDescription(string $description): void {
         $this->description = $description;
     }
-    public function setPublicationDate(\DateTime $publication_date): void
-    {
-        $this->publication_date = $publication_date;
+
+    public function setPublicationDate(\DateTime $publicationDate): void {
+        $this->publicationDate = $publicationDate;
     }
-    public function setAuthor(Author $author): void
-    {
+
+    public function setAuthor(Author $author): void {
         $this->author = $author;
     }
+
+    public function setId(int $id): void {
+        $this->id = $id;
+    }
+
+    
+
 }
